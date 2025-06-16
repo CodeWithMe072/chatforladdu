@@ -1,20 +1,16 @@
-"""
-ASGI config for instagram project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
-"""
-
 import os
-
-from django.core.asgi import get_asgi_application
-from channels.routing import ProtocolTypeRouter,URLRouter
+import django
+from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-import chat.routing
+from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'instagram.settings')
+
+# 👉 Setup Django before importing anything else that uses models/apps
+django.setup()
+
+# Now import routing (safe after setup)
+import chat.routing
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
@@ -22,5 +18,5 @@ application = ProtocolTypeRouter({
         URLRouter(
             chat.routing.websocket_urlpatterns
         )
-    )
+    ),
 })
