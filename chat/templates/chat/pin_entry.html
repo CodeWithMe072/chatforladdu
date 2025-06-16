@@ -1,0 +1,27 @@
+<div class="pin-overlay" id="pin-overlay" style="display: flex;">
+  <div class="pin-modal">
+    <div class="pin-header">
+      <h2>Enter Chat PIN</h2>
+      <p>Please enter your 6-digit PIN to access your chats</p>
+    </div>
+    
+    <div class="pin-container">
+      <input type="password" class="pin-input" maxlength="1" data-index="0" required>
+      <input type="password" class="pin-input" maxlength="1" data-index="1" required>
+      <input type="password" class="pin-input" maxlength="1" data-index="2" required>
+      <input type="password" class="pin-input" maxlength="1" data-index="3" required>
+      <input type="password" class="pin-input" maxlength="1" data-index="4" required>
+      <input type="password" class="pin-input" maxlength="1" data-index="5" required>
+    </div>
+    
+    <div class="pin-error" style="display: none;">
+      Incorrect PIN. Please try again.
+    </div>
+    
+    <button type="button" id="unlock-button" class="auth-button">Unlock</button>
+    
+    <div class="pin-footer">
+      <a href="#" id="forgot-pin">Forgot PIN?</a>
+    </div>
+  </div>
+</div>

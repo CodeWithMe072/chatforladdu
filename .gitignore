@@ -1,0 +1,41 @@
+# Byte-compiled / temporary files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.log
+
+# Environment files
+.env
+*.env
+
+# Virtualenv
+venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor-specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Django stuff
+db.sqlite3
+media/
+staticfiles/
+
+# Migrations (optional: keep if tracking DB schema)
+**/migrations/__pycache__/
+**/migrations/*.pyc
+
+# Secrets
+*.pem
+*.key
+
+# Node/npm (if using)
+node_modules/

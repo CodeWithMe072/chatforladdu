@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django Chat App</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+  <div class="app-container" style="filter: blur(20px); pointer-events:none;">
+    <!-- Sidebar for contacts -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Search friends..." />
+          <i class="fas fa-search"></i>
+        </div>
+      </div>
+      <div class="contacts-list" id="contacts-list">
+        {% for contact in contacts %}
+        <div class="contact-item" data-id="{{ contact.id }}" data-username="{{ contact.username }}"
+          data-img="{{ contact.avatar }}">
+          <div class="user-avatar">
+            <img
+              src="{{ contact.avatar }}"
+              alt="{{ contact.name }}" />
+            <span class="status-indicator {% if contact.is_online %}online{% else %}offline{% endif %}"></span>
+          </div>
+          <div class="contact-details">
+            <div class="contact-name">{{ contact.username }}</div>
+            <div class="contact-last-message">
+              {{ contact.last_message|truncatechars:30 }}
+            </div>
+          </div>
+          <div class="contact-time">{{ contact.last_message_time }}</div>
+        </div>
+        {% empty %}
+        <div class="no-contacts">No contacts found</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Main chat area -->
+    <div class="chat-container" id="chat-container">
+      <div class="chat-header">
+        <div class="back-btn" id="back-btn">
+          <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="chat-user-info" id="current-chat-user">
+          <div class="user-avatar">
+            <img loading="lazy" decoding="async" class="user-avatar-img" src="" alt="User" />
+            <span class="status-indicator"></span>
+          </div>
+          <div class="user-details">
+            <h3>Select a contact</h3>
+            <p>Last seen recently</p>
+          </div>
+        </div>
+        <div class="chat-actions">
+          <button class="action-btn call-btn" id="call-btn">
+            <i class="fas fa-phone"></i>
+          </button>
+          <button class="action-btn more-btn" id="more-btn">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="messages-container" id="messages-container">
+        <div class="welcome-message">
+          <h2>Welcome to Django Chat</h2>
+          <p>Select a contact to start chatting</p>
+        </div>
+      </div>
+
+      <div class="message-input-container">
+        <button class="attachment-btn" id="attachment-btn">
+          <i class="fas fa-paperclip"></i>
+        </button>
+        <div class="message-input-wrapper">
+          <input type="text" id="message-input" placeholder="Type a message..." />
+          <div class="emoji-btn" id="emoji-btn">
+            <i class="far fa-smile"></i>
+          </div>
+        </div>
+        <button class="send-btn" id="send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+
+      <!-- Reply container (hidden by default) -->
+      <div class="reply-container" id="reply-container">
+        <div class="reply-content">
+          <div class="reply-text" id="reply-text"></div>
+          <div class="reply-sender" id="reply-sender"></div>
+        </div>
+        <button class="close-reply-btn" id="close-reply-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Profile section (hidden by default) -->
+    <div class="profile-section" id="profile-section">
+      <div class="profile-header">
+        <div class="back-btn" id="profile-back-btn">
+          <i class="fas fa-arrow-left"></i>
+        </div>
+        <h2>Profile</h2>
+      </div>
+      <div class="profile-content">
+        <div class="profile-avatar">
+          <img loading="lazy" decoding="async" src="{% static 'images/laddu.png' %}" alt="Profile" id="profile-avatar" />
+        </div>
+        <h3 id="profile-name">User Name</h3>
+        <p id="profile-status">Online</p>
+        <div class="profile-actions">
+          <button class="profile-action-btn" id="message-profile-btn">
+            <i class="fas fa-message"></i>
+            <span>Message</span>
+          </button>
+          <button class="profile-action-btn" id="call-profile-btn">
+            <i class="fas fa-phone"></i>
+            <span>Call</span>
+          </button>
+          <button class="profile-action-btn" id="video-profile-btn">
+            <i class="fas fa-video"></i>
+            <span>Video</span>
+          </button>
+        </div>
+        <div class="profile-info">
+          <div class="info-item">
+            <i class="fas fa-at"></i>
+            <span id="profile-username">@username</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-info-circle"></i>
+            <span id="profile-bio">Hey there! I'm using Django Chat.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Media upload modal (hidden by default) -->
+    <div class="media-modal" id="media-modal">
+      <div class="media-modal-content">
+        <div class="media-modal-header">
+          <h3>Send Media</h3>
+          <button class="close-modal-btn" id="close-media-modal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="media-options">
+          <div class="media-option">
+            <label for="image-upload">
+              <i class="fas fa-image"></i>
+              <span>Image</span>
+            </label>
+            <input type="file" id="image-upload" accept="image/*" hidden />
+          </div>
+          <div class="media-option">
+            <label for="video-upload">
+              <i class="fas fa-video"></i>
+              <span>Video</span>
+            </label>
+            <input type="file" id="video-upload" accept="video/*" hidden />
+          </div>
+        </div>
+        <div class="media-preview" id="media-preview"></div>
+        <button class="send-media-btn" id="send-media-btn" disabled>
+          Send
+        </button>
+      </div>
+    </div>
+
+    <!-- Call modal (hidden by default) -->
+    <div class="call-modal" id="call-modal">
+      <div class="call-modal-content">
+        <div class="call-user-info">
+          <div class="call-user-avatar">
+            <img loading="lazy" decoding="async" src="{% static 'images/laddu.png' %}" alt="User" id="call-user-avatar" />
+          </div>
+          <h3 id="call-user-name">User Name</h3>
+          <p class="call-status">Calling...</p>
+        </div>
+        <div class="call-actions">
+          <button class="call-action-btn mute-btn">
+            <i class="fas fa-microphone-slash"></i>
+          </button>
+          <button class="call-action-btn end-call-btn" id="end-call-btn">
+            <i class="fas fa-phone-slash"></i>
+          </button>
+          <button class="call-action-btn speaker-btn">
+            <i class="fas fa-volume-up"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN Entry Overlay -->
+  {% include 'chat/pin_entry.html' %}
+
+  <!-- Django CSRF Token for AJAX requests -->
+
+  <script>
+    const CSRF_TOKEN = "{{ csrf_token }}";
+    const CURRENT_USER_ID = "{{ request.user.id }}";
+    const CURRENT_USER_USERNAME = "{{ request.user.username }}";
+    const WS_SCHEME = window.location.protocol === "https:" ? "wss" : "ws";
+    const WS_PATH = `${WS_SCHEME}://${window.location.host}/ws/nilam/`;
+    console.log(WS_PATH, WS_SCHEME);
+
+
+    const PIN_REQUIRED = true; // Set to true to enable PIN protection
+  </script>
+  <script src="{% static 'js/script.js' %}"></script>
+  <script src="{% static 'js/pin.js' %}"></script>
+</body>
+
+</html>
