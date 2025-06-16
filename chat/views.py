@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -13,6 +13,13 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 
+
+def create_admin(request):
+    if not UserAB.objects.filter(username="admin").exists():
+        admin= UserAB.objects.create_superuser("admin", "sanjaystar14581@gmail.com", "nilam143")
+        admin.chat_pin=145810
+        return HttpResponse("✅ Admin user created")
+    return HttpResponse("⚠️ Admin already exists")
 
 def sendMail():
     sender = "sanjaychouhan0072@gmail.com"
