@@ -215,6 +215,7 @@ def Userlogin(request):
         else:
             return render(request,'auth/login.html')
     return render(request,'auth/login.html') 
+
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -224,21 +225,48 @@ def register(request):
         full_name = request.POST.get('fullName', '')
         profile_image = request.FILES.get('profile_image') 
 
-        name_parts = full_name.strip().split(" ", 1)
-        first_name = name_parts[0]
-        last_name = name_parts[1] if len(name_parts) > 1 else ""
+        # --- VALIDATION ---
+        # 1. Check if username is already taken
+        if UserAB.objects.filter(username=username).exists():
+            return JsonResponse({'status': 'error', 'message': 'Username is already taken.'}, status=400)
 
-        user = UserAB(username=username, email=email, chat_pin=confirm_pin)
-        user.set_password(password)
-        user.first_name = first_name
-        user.last_name = last_name
-        user.profileImg = profile_image
-        user.save()
+        # 2. Check if email is already registered
+        if UserAB.objects.filter(email=email).exists():
+            return JsonResponse({'status': 'error', 'message': 'Email is already registered.'}, status=400)
         
-        login(request,user)
+        # 3. (Optional but recommended) Check if required fields are empty
+        if not all([username, email, password, confirm_pin]):
+            return JsonResponse({'status': 'error', 'message': 'All fields are required.'}, status=400)
+        # --- END VALIDATION ---
 
-        return JsonResponse({'status': 'success'})
-    return render(request,'auth/register.html')
+        try:
+            name_parts = full_name.strip().split(" ", 1)
+            first_name = name_parts[0]
+            last_name = name_parts[1] if len(name_parts) > 1 else ""
+
+            user = UserAB(username=username, email=email, chat_pin=confirm_pin)
+            user.set_password(password)
+            user.first_name = first_name
+            user.last_name = last_name
+            
+            # Only assign the image if one was uploaded
+            if profile_image:
+                user.profileImg = profile_image
+            
+            user.save()
+            
+            # Log the user in after successful registration
+            login(request, user)
+
+            return JsonResponse({'status': 'success', 'message': 'Registration successful!'})
+        
+        except Exception as e:
+            # Catch any other unexpected errors during save and log them
+            # Check your Render logs for this message if you still get a 500 error
+            print(f"An unexpected error occurred during registration: {e}") 
+            return JsonResponse({'status': 'error', 'message': 'An internal server error occurred.'}, status=500)
+
+    return render(request, 'auth/register.html')
 
 
 def chatpin(request):
