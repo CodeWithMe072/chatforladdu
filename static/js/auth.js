@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append('email', email);
       formData.append('profile_image', profileImage);
 
-      const response = await fetch('/register/', {
+      const response = await fetch('register/', {
         method: 'POST',
         headers: {
           'X-CSRFToken': csrf_token

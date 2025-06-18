@@ -9,6 +9,8 @@ from django.utils import timezone
 
 
 class MyChat(AsyncJsonWebsocketConsumer):
+    # consumers.py (Correct Order)
+
     async def connect(self):
         user = self.scope["user"]
 
@@ -19,8 +21,11 @@ class MyChat(AsyncJsonWebsocketConsumer):
         self.group_name = f"mychat_app{user.id}"
         print("WebSocket CONNECT:", self.group_name)
 
-        await self.accept()
+        # Do the risky operation FIRST
         await self.channel_layer.group_add(self.group_name, self.channel_name)
+
+        # If the line above succeeds, THEN accept the connection
+        await self.accept()
 
     async def disconnect(self, close_code):
         print("WebSocket DISCONNECT:", close_code)
