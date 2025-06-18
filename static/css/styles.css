@@ -764,22 +764,6 @@ body {
 }
 
 /* Responsive adjustments */
-@media (min-width: 768px) {
-  .sidebar {
-    width: 350px;
-    position: relative;
-    transform: none;
-  }
-
-  .chat-container {
-    position: relative;
-    transform: none;
-  }
-
-  .back-btn {
-    display: none;
-  }
-}
 
 /* Animation for messages */
 @keyframes slideIn {
@@ -892,4 +876,54 @@ body {
 
 .connection-status.connected {
   background-color: #4caf50;
+}
+
+@media screen and (max-width: 768px) {
+  .message-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background-color: white;
+    border-top: 1px solid #ccc;
+  }
+
+  .messages-container {
+    padding-bottom: 80px !important;
+  }
+
+  .chat-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    padding-bottom: 80px;
+    z-index: 5;
+  }
+
+  .sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    z-index: 10;
+    background-color: white;
+    overflow-y: auto;
+  }
+
+  .back-btn {
+    display: flex; /* Show back button on mobile */
+  }
+
+  body {
+    color: black;
+    height: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }

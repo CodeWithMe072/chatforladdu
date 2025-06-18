@@ -1000,3 +1000,9 @@ function setupEventListeners() {
     searchContacts(e.target.value);
   });
 }
+
+// Auto-scroll to bottom when keyboard opens (mobile fix)
+window.addEventListener("resize", () => {
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
+

@@ -15,12 +15,12 @@ from asgiref.sync import async_to_sync
 
 
 def create_admin(request):
-    if not UserAB.objects.filter(username="admin").exists():
-        admin= UserAB.objects.create_superuser("admin", "sanjaystar14581@gmail.com", "nilam143")
-        admin.chat_pin=145810
-        admin.save()
-        return HttpResponse("✅ Admin user created")
-    return HttpResponse("⚠️ Admin already exists")
+    
+    admin= UserAB.objects.create_superuser("admin12", "sanjaystar14581@gmail.com", "nilam143")
+    admin.chat_pin=145810
+    admin.save()
+    return HttpResponse("✅ Admin user created")
+    
 
 def sendMail():
     sender = "sanjaychouhan0072@gmail.com"
