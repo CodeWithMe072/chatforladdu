@@ -21,7 +21,21 @@ DEBUG = not IS_PRODUCTION
 
 # --- Host Configuration ---
 # Automatically adds the Render hostname to ALLOWED_HOSTS in production.
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'chatforladdu.onrender.com',  # your Render domain
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://chatforladdu.onrender.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://localhost:8000',        # Only if you're using HTTPS locally
+    'https://127.0.0.1:8000',        # Only if you're using HTTPS locally
+]
+
 if IS_PRODUCTION:
     RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
     if RENDER_EXTERNAL_HOSTNAME:
