@@ -215,8 +215,8 @@
 
   // WebSocket connection path
   const WS_SCHEME = window.location.protocol === "https:" ? "wss" : "ws";
-  const WS_PATH = `${WS_SCHEME}://${window.location.host}/ws/${CURRENT_USER_USERNAME}/`;
-  console.log(WS_PATH)
+  {% comment %} const WS_PATH = `${WS_SCHEME}://${window.location.host}/ws/${CURRENT_USER_USERNAME}/`;
+  console.log(WS_PATH) {% endcomment %}
 
   // Pin protection flag
   const PIN_REQUIRED = true;
