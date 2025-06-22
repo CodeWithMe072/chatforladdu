@@ -207,20 +207,24 @@
   {% include 'chat/pin_entry.html' %}
 
   <!-- Django CSRF Token for AJAX requests -->
+<script>
+  // Safe values passed from Django
+  const CSRF_TOKEN = "{{ csrf_token }}";
+  const CURRENT_USER_ID = "{{ request.user.id }}";
+  const CURRENT_USER_USERNAME = "{{ request.user.username }}";
 
-  <script>
-    const CSRF_TOKEN = "{{ csrf_token }}";
-    const CURRENT_USER_ID = "{{ request.user.id }}";
-    const CURRENT_USER_USERNAME = "{{ request.user.username }}";
-    const WS_SCHEME = window.location.protocol === "https:" ? "wss" : "ws";
-    const WS_PATH = `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/${username}/`;
+  // WebSocket connection path
+  const WS_SCHEME = window.location.protocol === "https:" ? "wss" : "ws";
+  const WS_PATH = `${WS_SCHEME}://${window.location.host}/ws/${CURRENT_USER_USERNAME}/`;
+  console.log(WS_PATH)
 
+  // Pin protection flag
+  const PIN_REQUIRED = true;
+</script>
 
-    const PIN_REQUIRED = true; // Set to true to enable PIN protection
-  </script>
-  <script src="{% static 'js/script.js' %}"></script>
-  <script src="{% static 'js/pin.js' %}"></script>
-  
+<!-- JavaScript dependencies -->
+<script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'js/pin.js' %}"></script>
 </body>
 
 </html>

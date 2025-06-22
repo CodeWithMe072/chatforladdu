@@ -80,7 +80,7 @@ function connectWebSocket(username) {
     chatSocket.close(); // Close previous socket if open
   }
 
-  const wsUrl = `${WS_PATH}${username}/`;
+ const wsUrl = `${WS_SCHEME}://${window.location.host}/ws/${username}/`;
   chatSocket = new WebSocket(wsUrl);
 
   chatSocket.onopen = () => {
