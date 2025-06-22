@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <div class="app-container" >
+  <div class="app-container" style="filter: blur(10px);">
     <!-- Sidebar for contacts -->
     <div class="sidebar" id="sidebar">
       <div class="sidebar-header">
@@ -24,10 +24,10 @@
       <div class="contacts-list" id="contacts-list">
         {% for contact in contacts %}
         <div class="contact-item" data-id="{{ contact.id }}" data-username="{{ contact.username }}"
-          data-img="{{ contact.avatar }}">
+          data-img="{% static 'images/laddu.png' %}">
           <div class="user-avatar">
             <img
-              src="{{ contact.avatar }}"
+              src="{% static 'images/laddu.png' %}"
               alt="{{ contact.name }}" />
             <span class="status-indicator {% if contact.is_online %}online{% else %}offline{% endif %}"></span>
           </div>
@@ -213,8 +213,7 @@
     const CURRENT_USER_ID = "{{ request.user.id }}";
     const CURRENT_USER_USERNAME = "{{ request.user.username }}";
     const WS_SCHEME = window.location.protocol === "https:" ? "wss" : "ws";
-    const WS_PATH = `${WS_SCHEME}://${window.location.host}/ws/nilam/`;
-    console.log(WS_PATH, WS_SCHEME);
+    const WS_PATH = `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/${username}/`;
 
 
     const PIN_REQUIRED = true; // Set to true to enable PIN protection

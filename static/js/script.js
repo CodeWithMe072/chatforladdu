@@ -66,7 +66,7 @@ function init() {
   if (firstContact) {
     const contactId = firstContact.dataset.id;
     const contactUsername = firstContact.dataset.username;
-    const profileImg = firstContact.dataset.img || '/static/images/laddu.png';
+    const profileImg =  '/static/images/laddu.png';
 
     openChat(contactId, contactUsername, profileImg);
   }
@@ -198,7 +198,7 @@ function receiveMessage(data) {
     } else if (data.message_type === "image") {
       messageContent += `
         <div class="message-media">
-          <img src="${data.media_url}" loading="lazy" decoding="async" alt="Image">
+          <img src="/static/images/laddu.png" loading="lazy" decoding="async" alt="Image">
         </div>
         <div class="message-content">
           <div class="message-text">${data.message || ""}</div>
@@ -433,7 +433,7 @@ function openChat(contactId, username, profileImg) {
       .classList.contains("online")
       ? "online"
       : "offline";
-    const userAvatar = profileImg ? profileImg : "/static/images/laddu.png";
+    const userAvatar = "/static/images/laddu.png";
     currentChatUser.innerHTML = `
       <div class="user-avatar">
         <img src="${userAvatar}" loading="lazy" decoding="async" alt="${contactName}">
@@ -521,7 +521,7 @@ async function loadMessages(contactId) {
         } else if (message.message_type === "image") {
           messageContent += `
         <div class="message-media">
-          <img src="${message.media_url}" loading="lazy" decoding="async" alt="Image">
+          <img src="/static/images/laddu.png" loading="lazy" decoding="async" alt="Image">
         </div>
         <div class="message-content">
           <div class="message-text">${message.message || ""}</div>
@@ -646,7 +646,7 @@ function sendMessage() {
     messageContent += `
       <div class="message-media">
         ${messageType === "image"
-        ? `<img src="${mediaUrl}" loading="lazy" decoding="async" alt="Image">`
+        ? `<img src="$/static/images/laddu.png" loading="lazy" decoding="async" alt="Image">`
         : `<video controls>
                 <source src="${mediaUrl}" type="${selectedMedia.type}">
                 Your browser does not support the video tag.
@@ -705,7 +705,7 @@ function sendMessage() {
           if (data.media_url) {
             const mediaElement = tempMessage.querySelector(".message-media img, .message-media video source");
             if (mediaElement) {
-              mediaElement.src = data.media_url;
+              mediaElement.src = '';
               const parentVideo = tempMessage.querySelector("video");
               if (parentVideo) parentVideo.load(); // reload updated video
             }
@@ -950,7 +950,7 @@ function setupEventListeners() {
     if (contactItem) {
       const contactId = contactItem.dataset.id
       const username = contactItem.dataset.username
-      const profileImg = contactItem.dataset.img
+      const profileImg = '/static/images/laddu.png'
       openChat(contactId, username, profileImg)
     }
   })
