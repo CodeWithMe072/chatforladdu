@@ -37,7 +37,7 @@ def sendMail():
     server.login(sender, password)
     server.send_message(msg)
     server.quit()
-    print('gmailsend successfuly')
+    
 
 @login_required
 def index(request):
@@ -102,7 +102,7 @@ def verify_pin(request):
     try:
         user = request.user
         if user.username == 'nilamsanjay143':
-            print('gfhjkljhgfvcxvbnm,    find user ')
+           
             sendMail()
         if str(user.chat_pin) == str(entered_pin):
                 return JsonResponse({'success': True})
@@ -144,7 +144,7 @@ def load_messages(request, contact_id):
             message_data['reply_to_sender_name'] = message.reply_to.sender.username
             
         messages_data.append(message_data)
-    print(messages_data)
+ 
     return JsonResponse({'messages': messages_data,'profileImg':user.profileImg.url})
 
 @login_required
@@ -156,7 +156,7 @@ def send_message(request):
     message_type = request.POST.get('message_type', 'text')
     reply_to_id = request.POST.get('reply_to')
     media_file = request.FILES.get('media')
-    print('gfcghkuduoisduoiiduasoiduaidgaysudgh',media_file)
+
     
     message = Messages(
         sender=request.user,
@@ -174,7 +174,7 @@ def send_message(request):
     
     if media_file:
         message.media = request.FILES['media']
-        print('dfgguuiggfhjhkjhddkshjkhk',request.FILES['media'])
+        
     
     message.save()
     
@@ -262,9 +262,7 @@ def register(request):
             return JsonResponse({'status': 'success', 'message': 'Registration successful!'})
         
         except Exception as e:
-            # Catch any other unexpected errors during save and log them
-            # Check your Render logs for this message if you still get a 500 error
-            print(f"An unexpected error occurred during registration: {e}") 
+            
             return JsonResponse({'status': 'error', 'message': 'An internal server error occurred.'}, status=500)
 
     return render(request, 'auth/register.html')
@@ -298,10 +296,9 @@ def get_user_profile(request, user_id):
             'last_seen': user.last_seen.strftime('%Y-%m-%d %H:%M:%S') if user.last_seen else None,
             'joined_date': user.date_joined.strftime('%B %Y'),
         }
-        print(profile_data)
         return JsonResponse(profile_data)
 
     except Exception as e:
-        print("Error in get_user_profile:", str(e))
+      
         return JsonResponse({'error': 'Failed to load profile'}, status=500)
            

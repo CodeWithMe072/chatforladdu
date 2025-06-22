@@ -16,21 +16,21 @@ class MyChat(AsyncJsonWebsocketConsumer):
             return
 
         self.group_name = f"mychat_app{user.id}"
-        print("WebSocket CONNECT:", self.group_name)
+     
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
         user = self.scope.get("user")
-        print("WebSocket DISCONNECT:", close_code)
+     
         if user and not user.is_anonymous:
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def receive(self, text_data=None):
         try:
             data = json.loads(text_data)
-            print("RECEIVED:", data)
+           
 
             msg_type = data.get("type")
             if msg_type == "status":
@@ -43,7 +43,7 @@ class MyChat(AsyncJsonWebsocketConsumer):
                 print("❗ Unknown message type:", msg_type)
 
         except Exception as e:
-            print("🔥 Error in receive() 🔥")
+          
             traceback.print_exc()
             await self.close(code=1011)
 
@@ -102,10 +102,10 @@ class MyChat(AsyncJsonWebsocketConsumer):
                     }
                 )
             else:
-                print("⚠️ Missing recipient or message")
+                pass
 
         except Exception as e:
-            print("🔥 Error in handle_chat() 🔥")
+            
             traceback.print_exc()
             await self.close(code=1011)
 
